@@ -43,14 +43,15 @@ export async function onRequestPost(context) {
    - itemCode: 從「Barcode Item/SubCode」欄位識別，每行可能有2個代碼，取9碼的那個
    - itemName: 從「Item Name/Sub Code Name」欄位識別完整品名
    - quantity: 從「Booking Qty」欄位識別訂貨數量
-4. **日期時間**: Booking Date 欄位
+   - quantity: 從「Booking Qty」欄位識別訂貨數量
+4. **日期時間**: 優先從「Printing Date & Time」(列印日期時間) 欄位識別完整日期與時間 (使用24小時制，例如 2026/01/01 15:21)，若無則找 Booking Date
 
 請以 JSON 格式回傳:
 {
   "bookingNo": "訂貨編號或null",
   "invoiceNo": "發票號碼或null",
   "store": "店別",
-  "datetime": "日期時間",
+  "datetime": "日期及時間",
   "items": [
     { "itemCode": "9碼代碼", "itemName": "品名", "quantity": 1 }
   ]
