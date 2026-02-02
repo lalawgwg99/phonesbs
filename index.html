@@ -814,7 +814,7 @@
             // Using Traditional Chinese labels per requirement, but styled elegantly
 
             html += `<div class="list-item">
-                <span class="list-label">店別</span>
+                <span class="list-label">店點</span>
                 <input type="text" class="editable-input" id="edit-store" value="${orderData.store || ''}" placeholder="店別">
             </div>`;
 
@@ -838,10 +838,7 @@
                 <input type="text" class="editable-input" id="edit-address" value="${orderData.address || ''}" placeholder="送貨地址">
             </div>`;
 
-            html += `<div class="list-item">
-                <span class="list-label">發票</span>
-                <input type="text" class="editable-input" id="edit-invoiceNo" value="${orderData.invoiceNo || ''}" placeholder="發票號碼">
-            </div>`;
+            // Removed Invoice field as per request
 
             // Items
             if (orderData.items && orderData.items.length > 0) {
@@ -895,7 +892,7 @@
             orderData.bookingNo = document.getElementById('edit-bookingNo').value;
             orderData.phone = document.getElementById('edit-phone').value;
             orderData.address = document.getElementById('edit-address').value;
-            orderData.invoiceNo = document.getElementById('edit-invoiceNo').value;
+            // Removed Invoice
             orderData.remarks = document.getElementById('edit-remarks').value;
 
             if (orderData.items) {
@@ -919,19 +916,11 @@
                 `${orderData.bookingNo || ''}`
             ];
 
-            // Items logic (if needed in share text, typically it is requested)
-            if (orderData.items && orderData.items.length > 0) {
-                lines.push('');
-                orderData.items.forEach((item, index) => {
-                    const qty = item.quantity > 1 ? ` *${item.quantity}` : '';
-                    lines.push(`${item.itemCode || ''} ${item.itemName}${qty}`);
-                });
-                lines.push('');
-            }
+            // Removed Items from share text as per request/restoration
 
             if (orderData.phone) lines.push(`電話：${orderData.phone}`);
             if (orderData.address) lines.push(`地址：${orderData.address}`);
-            if (orderData.invoiceNo) lines.push(`發票：${orderData.invoiceNo}`);
+            // Removed Invoice
             lines.push(`備註：${orderData.remarks || ''}`);
 
             const text = lines.join('\n');
