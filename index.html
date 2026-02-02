@@ -811,7 +811,8 @@
         function renderResultsList() {
             let html = '';
 
-            // Restore Store label to "店別" as requested in screenshot text ("店別名稱")
+            // Using Traditional Chinese labels per requirement, but styled elegantly
+
             html += `<div class="list-item">
                 <span class="list-label">店別</span>
                 <input type="text" class="editable-input" id="edit-store" value="${orderData.store || ''}" placeholder="店別">
@@ -837,13 +838,13 @@
                 <input type="text" class="editable-input" id="edit-address" value="${orderData.address || ''}" placeholder="送貨地址">
             </div>`;
 
-            // Restore Invoice Field
+            // Restore Invoice
             html += `<div class="list-item">
                 <span class="list-label">發票</span>
                 <input type="text" class="editable-input" id="edit-invoiceNo" value="${orderData.invoiceNo || ''}" placeholder="發票號碼">
             </div>`;
 
-            // Items List
+            // Items
             if (orderData.items && orderData.items.length > 0) {
                 orderData.items.forEach((item, index) => {
                     const code = formatItemCode(item.itemCode, item.itemName);
@@ -913,28 +914,49 @@
 
         async function shareResult() {
             if (!orderData) return;
-            const lines = [
-                `店別：${orderData.store || ''}`,
-                `日期：${formatDatetime(orderData.datetime)}`,
-                `${orderData.bookingNo || ''}`
-            ];
 
-            // Restore Items in Share Text
+            // 1. 店別
+            let text = `1. 店別: ${orderData.store || ''}\n`;
+
+            // 2. 日期時間
+            let dateStr = formatDatetime(orderData.datetime);
+            // 截圖中只有日期 '2026/02/01'，去除時間部分
+            if (dateStr.includes(' ')) {
+                dateStr = dateStr.split(' ')[0];
+            }
+            text += `2. 日期時間: ${dateStr}\n`;
+
+            // 處理商品資料
+            let codes = [];
+            let names = [];
             if (orderData.items && orderData.items.length > 0) {
-                lines.push('');
-                orderData.items.forEach((item, index) => {
-                    const qty = item.quantity > 1 ? ` *${item.quantity}` : '';
-                    lines.push(`${item.itemCode || ''} ${item.itemName}${qty}`);
+                orderData.items.forEach(item => {
+                    const prefixCode = formatItemCode(item.itemCode, item.itemName);
+                    const qtySuffix = item.quantity > 1 ? ` *${item.quantity}` : '';
+                    if (prefixCode) codes.push(prefixCode);
+                    names.push(`${item.itemName}${qtySuffix}`);
                 });
-                lines.push('');
             }
 
-            if (orderData.phone) lines.push(`電話：${orderData.phone}`);
-            if (orderData.address) lines.push(`地址：${orderData.address}`);
-            if (orderData.invoiceNo) lines.push(`發票：${orderData.invoiceNo}`);
-            lines.push(`備註：${orderData.remarks || ''}`);
+            // 3. itemcode
+            text += `3. itemcode:\n`;
+            if (codes.length > 0) {
+                text += `${codes.join('\n')}\n`;
+            } else {
+                text += `\n`;
+            }
 
-            const text = lines.join('\n');
+            // 4. 品名
+            text += `4. 品名: ${names.join('\n')}\n`;
+
+            // 5. 編號
+            text += `5. 編號: ${orderData.bookingNo || ''}\n`;
+
+            // 6. 發票
+            text += `6. 發票: ${orderData.invoiceNo || ''}\n`;
+
+            // Footer
+            text += `\n🌈煩請協助配貨`;
 
             try {
                 const filesToShare = [];
