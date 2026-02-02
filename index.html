@@ -26,7 +26,9 @@
             --error-color: #A94442;
 
             --font-serif: "Playfair Display", serif;
-            --font-sans: "Inter", sans-serif;
+            /* 標題保留些許西式優雅 */
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            /* 內文優先使用系統繁體中文字體 */
 
             --spacing-unit: 24px;
         }
@@ -132,20 +134,19 @@
         }
 
         .upload-title {
-            font-family: var(--font-serif);
+            font-family: var(--font-sans);
             font-size: 20px;
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 8px;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.05em;
         }
 
         .upload-hint {
             font-family: var(--font-sans);
             font-size: 13px;
             color: var(--text-accent);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
         }
 
         #fileInput {
@@ -188,7 +189,7 @@
             color: var(--text-secondary);
             border: none;
             font-family: var(--font-sans);
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
@@ -221,9 +222,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-secondary);
-            text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
@@ -262,10 +262,10 @@
 
         .processing-text {
             font-family: var(--font-sans);
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-primary);
-            text-transform: uppercase;
             letter-spacing: 0.1em;
+            font-weight: 500;
         }
 
         /* --- Buttons --- */
@@ -273,10 +273,9 @@
             width: 100%;
             padding: 16px 24px;
             font-family: var(--font-sans);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.1em;
             border: 1px solid var(--primary-btn);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -307,8 +306,8 @@
 
         .btn-small {
             padding: 8px 16px;
-            font-size: 12px;
-            letter-spacing: 0.1em;
+            font-size: 13px;
+            letter-spacing: 0.05em;
             border-radius: 0;
             width: auto;
             min-width: 80px;
@@ -336,7 +335,7 @@
             font-size: 22px;
             font-weight: 700;
             color: var(--text-primary);
-            font-style: italic;
+            /* font-style: italic; Removed for Chinese title */
         }
 
         /* --- List Items --- */
@@ -354,11 +353,11 @@
         .list-label {
             width: 80px;
             font-family: var(--font-sans);
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-secondary);
-            /* text-transform: uppercase; Removed for Chinese compatibility */
             letter-spacing: 0.05em;
             flex-shrink: 0;
+            font-weight: 500;
         }
 
         .list-value {
@@ -385,10 +384,9 @@
         }
 
         .item-block-label {
-            font-family: var(--font-serif);
+            font-family: var(--font-sans);
             font-size: 16px;
             font-weight: 600;
-            font-style: italic;
         }
 
         /* --- Inputs --- */
@@ -429,10 +427,10 @@
             color: #fff;
             border: none;
             font-family: var(--font-sans);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             letter-spacing: 0.2em;
-            text-transform: uppercase;
+            /* text-transform: uppercase; */
             cursor: pointer;
             border-radius: 0;
         }
@@ -442,8 +440,8 @@
             color: var(--text-secondary);
             border: 1px solid var(--border-color);
             padding: 4px 12px;
-            font-size: 10px;
-            text-transform: uppercase;
+            font-size: 12px;
+            /* text-transform: uppercase; */
             letter-spacing: 0.05em;
             cursor: pointer;
             transition: all 0.2s;
@@ -483,26 +481,24 @@
         }
 
         .footer-title {
-            font-family: var(--font-serif);
+            font-family: var(--font-sans);
             font-size: 14px;
             font-weight: 700;
             margin-bottom: 12px;
             letter-spacing: 0.05em;
-            text-transform: uppercase;
         }
 
         .footer-text {
             font-family: var(--font-sans);
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-secondary);
             line-height: 2;
         }
 
         .copyright {
             font-family: var(--font-sans);
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-accent);
-            text-transform: uppercase;
             letter-spacing: 0.15em;
             margin-top: 32px;
         }
@@ -545,7 +541,7 @@
                         <line x1="12" y1="3" x2="12" y2="15"></line>
                     </svg>
                 </div>
-                <div class="upload-title">UPLOAD IMAGE</div>
+                <div class="upload-title">上傳訂單照片</div>
                 <div class="upload-hint">拍照或點擊選擇圖片</div>
             </div>
             <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
@@ -579,13 +575,13 @@
                 <img id="previewImage" class="preview-image" src="" alt="預覽">
                 <div class="processing-overlay" id="processingOverlay" style="display:none;">
                     <span class="spinner" style="font-size: 32px; color: #1A1A1A;">◌</span>
-                    <span class="processing-text">PROCESSING...</span>
+                    <span class="processing-text">處理中...</span>
                 </div>
             </div>
 
             <div class="button-group">
-                <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeImage()">START ANALYZE</button>
-                <button class="btn btn-secondary" onclick="resetImage()">RESET</button>
+                <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeImage()">開始識別分析</button>
+                <button class="btn btn-secondary" onclick="resetImage()">重新上傳</button>
             </div>
         </div>
 
@@ -597,9 +593,9 @@
         <!-- Results Card -->
         <div class="results-section" id="resultsSection">
             <div class="results-header">
-                <div class="results-title">Analysis Result</div>
+                <div class="results-title">識別結果</div>
                 <div class="results-actions">
-                    <button class="btn btn-small btn-primary" onclick="shareResult()">SHARE</button>
+                    <button class="btn btn-small btn-primary" onclick="shareResult()">分享</button>
                 </div>
             </div>
             <div id="resultsList"></div>
@@ -607,11 +603,11 @@
 
         <div class="footer">
             <div class="footer-card">
-                <div class="footer-title">Instructions</div>
+                <div class="footer-title">使用說明</div>
                 <div class="footer-text">
                     01. 上傳訂單照片<br>
-                    02. 選擇「數位文件模式」增強清晰度 (可選)<br>
-                    03. 點擊「START ANALYZE」<br>
+                    02. 選擇「文件模式」增強清晰度 (可選)<br>
+                    03. 點擊「開始識別分析」<br>
                     04. 檢查、修正資料並分享
                 </div>
             </div>
@@ -619,7 +615,7 @@
                 Designed by 德 <br>
                 <a href="https://github.com/lalawgwg99/phonesbs" target="_blank"
                     style="margin-top: 8px; display: inline-block;">
-                    📖 View on GitHub (專案說明)
+                    📖 查看 GitHub 專案
                 </a>
             </div>
         </div>
@@ -745,7 +741,7 @@
 
             const btn = document.getElementById('analyzeBtn');
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner">◌</span> PROCESSING...';
+            btn.innerHTML = '<span class="spinner">◌</span> 處理中...';
             document.getElementById('errorCard').style.display = 'none';
 
             try {
@@ -773,7 +769,7 @@
                 document.getElementById('errorText').textContent = err.message || '識別過程發生錯誤';
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'START ANALYZE';
+                btn.textContent = '開始識別分析';
             }
         }
 
@@ -854,7 +850,7 @@
                     html += `<div class="item-block" id="item-block-${index}">
                         <div class="item-header">
                             <div class="item-block-label">商品 ${index + 1}</div>
-                            <button class="delete-btn" onclick="deleteItem(${index})">DELETE</button>
+                            <button class="delete-btn" onclick="deleteItem(${index})">刪除</button>
                         </div>
                         <div class="list-item" style="border: none; padding: 4px 0;">
                             <span class="list-label">代碼</span>
@@ -880,7 +876,7 @@
 
             // Confirm
             html += `<div style="padding: 16px 0;">
-                <button class="confirm-btn" onclick="confirmEdit()">VERIFY & SHARE</button>
+                <button class="confirm-btn" onclick="confirmEdit()">確認資料正確並分享</button>
             </div>`;
 
             document.getElementById('resultsList').innerHTML = html;
