@@ -848,6 +848,9 @@
             if (orderData.items && orderData.items.length > 0) {
                 orderData.items.forEach((item, index) => {
                     const code = formatItemCode(item.itemCode, item.itemName);
+                    // DEFAULT QTY TO 1 IF MISSING
+                    const qty = item.quantity || 1;
+
                     html += `<div class="item-block" id="item-block-${index}">
                         <div class="item-header">
                             <div class="item-block-label">商品 ${index + 1}</div>
@@ -863,7 +866,7 @@
                         </div>
                         <div class="list-item" style="border: none; padding: 4px 0;">
                             <span class="list-label">數量</span>
-                            <input type="number" class="editable-input" id="edit-qty-${index}" value="${item.quantity || 1}" min="1" style="width: 60px;">
+                            <input type="number" class="editable-input" id="edit-qty-${index}" value="${qty}" min="1" style="width: 60px;">
                         </div>
                     </div>`;
                 });
@@ -906,6 +909,7 @@
                     const qtyInput = document.getElementById(`edit-qty-${index}`);
                     if (codeInput) item.itemCode = codeInput.value;
                     if (nameInput) item.itemName = nameInput.value;
+                    // DEFAULT TO 1 IF INVALID/EMPTY
                     if (qtyInput) item.quantity = parseInt(qtyInput.value) || 1;
                 });
             }
@@ -915,48 +919,48 @@
         async function shareResult() {
             if (!orderData) return;
 
-            // 1. 店別
+            // 1. 店別: [Value]
             let text = `1. 店別: ${orderData.store || ''}\n`;
 
-            // 2. 日期時間
+            // 2. [Date Time] (24h)
+            // Ensure formatDatetime returns YYYY/MM/DD HH:MM
             let dateStr = formatDatetime(orderData.datetime);
-            // 截圖中只有日期 '2026/02/01'，去除時間部分
-            if (dateStr.includes(' ')) {
-                dateStr = dateStr.split(' ')[0];
-            }
-            text += `2. 日期時間: ${dateStr}\n`;
+            text += `2. ${dateStr}\n`;
 
-            // 處理商品資料
+            // Prepare Items
             let codes = [];
             let names = [];
             if (orderData.items && orderData.items.length > 0) {
                 orderData.items.forEach(item => {
                     const prefixCode = formatItemCode(item.itemCode, item.itemName);
-                    const qtySuffix = item.quantity > 1 ? ` *${item.quantity}` : '';
+                    // ALWAYS SHOW QUANTITY, e.g. *1
+                    const qty = item.quantity || 1;
+                    const qtySuffix = ` *${qty}`;
+
                     if (prefixCode) codes.push(prefixCode);
                     names.push(`${item.itemName}${qtySuffix}`);
                 });
             }
 
-            // 3. itemcode
-            text += `3. itemcode:\n`;
+            // 3. [Item Codes]
             if (codes.length > 0) {
-                text += `${codes.join('\n')}\n`;
+                text += `3. ${codes.join('\n')}\n`;
             } else {
-                text += `\n`;
+                text += `3. \n`;
             }
 
-            // 4. 品名
-            text += `4. 品名: ${names.join('\n')}\n`;
+            // 4. [Item Names *Qty]
+            if (names.length > 0) {
+                text += `4. ${names.join('\n')}\n`;
+            } else {
+                text += `4. \n`;
+            }
 
-            // 5. 編號
-            text += `5. 編號: ${orderData.bookingNo || ''}\n`;
-
-            // 6. 發票
-            text += `6. 發票: ${orderData.invoiceNo || ''}\n`;
+            // 5. [Booking No]
+            text += `5. ${orderData.bookingNo || ''}`;
 
             // Footer
-            text += `\n🌈煩請協助配貨`;
+            text += `\n\n煩請協助配貨🌈`;
 
             try {
                 const filesToShare = [];
