@@ -779,9 +779,10 @@
             if (cleanCode.length < 9) return cleanCode;
             const lowerName = (name || '').toLowerCase();
             let prefix = '';
+            // Fix keywords for correct identification
             if (lowerName.includes('瓦斯') || lowerName.includes('熱水器') || lowerName.includes('爐') || lowerName.includes('gas') || lowerName.includes('heater')) {
                 prefix = '41';
-            } else if (lowerName.includes('手機') || lowerName.includes('手錶') || lowerName.includes('pods') || lowerName.includes('phone') || lowerName.includes('watch')) {
+            } else if (lowerName.includes('手機') || lowerName.includes('手錶') || lowerName.includes('pods') || lowerName.includes('phone') || lowerName.includes('watch') || lowerName.includes('iphone')) {
                 prefix = '42';
             } else if (lowerName.includes('電腦') || lowerName.includes('mac') || lowerName.includes('ipad')) {
                 prefix = '45';
@@ -800,6 +801,7 @@
                 const minutes = String(date.getMinutes()).padStart(2, '0');
                 return `${year}/${month}/${day} ${hours}:${minutes}`;
             }
+            // If date parsing failed or it's just a string, return as is.
             return datetime;
         }
 
@@ -943,7 +945,12 @@
             }
 
             // 3. [Item Codes]
+            // Format: 3. code1\ncode2
             if (codes.length > 0) {
+                // If the first code exists, append it to the label line?
+                // No, user screenshot shows "3. itemcode:\n<code>", but latest text request was "3. <code>".
+                // I will follow "3. <code>" for compact.
+                // If multiple codes, likely "3. code1\ncode2".
                 text += `3. ${codes.join('\n')}\n`;
             } else {
                 text += `3. \n`;
