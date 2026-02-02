@@ -536,7 +536,7 @@
                 <div class="upload-icon">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                         stroke-linecap="square" stroke-linejoin="miter">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                         <polyline points="17 8 12 3 7 8"></polyline>
                         <line x1="12" y1="3" x2="12" y2="15"></line>
                     </svg>
@@ -811,10 +811,9 @@
         function renderResultsList() {
             let html = '';
 
-            // Using Traditional Chinese labels per requirement, but styled elegantly
-
+            // Restore Store label to "店別" as requested in screenshot text ("店別名稱")
             html += `<div class="list-item">
-                <span class="list-label">店點</span>
+                <span class="list-label">店別</span>
                 <input type="text" class="editable-input" id="edit-store" value="${orderData.store || ''}" placeholder="店別">
             </div>`;
 
@@ -838,9 +837,13 @@
                 <input type="text" class="editable-input" id="edit-address" value="${orderData.address || ''}" placeholder="送貨地址">
             </div>`;
 
-            // Removed Invoice field as per request
+            // Restore Invoice Field
+            html += `<div class="list-item">
+                <span class="list-label">發票</span>
+                <input type="text" class="editable-input" id="edit-invoiceNo" value="${orderData.invoiceNo || ''}" placeholder="發票號碼">
+            </div>`;
 
-            // Items
+            // Items List
             if (orderData.items && orderData.items.length > 0) {
                 orderData.items.forEach((item, index) => {
                     const code = formatItemCode(item.itemCode, item.itemName);
@@ -892,7 +895,7 @@
             orderData.bookingNo = document.getElementById('edit-bookingNo').value;
             orderData.phone = document.getElementById('edit-phone').value;
             orderData.address = document.getElementById('edit-address').value;
-            // Removed Invoice
+            orderData.invoiceNo = document.getElementById('edit-invoiceNo').value;
             orderData.remarks = document.getElementById('edit-remarks').value;
 
             if (orderData.items) {
@@ -911,16 +914,24 @@
         async function shareResult() {
             if (!orderData) return;
             const lines = [
-                `店點：${orderData.store || ''}`,
+                `店別：${orderData.store || ''}`,
                 `日期：${formatDatetime(orderData.datetime)}`,
                 `${orderData.bookingNo || ''}`
             ];
 
-            // Removed Items from share text as per request/restoration
+            // Restore Items in Share Text
+            if (orderData.items && orderData.items.length > 0) {
+                lines.push('');
+                orderData.items.forEach((item, index) => {
+                    const qty = item.quantity > 1 ? ` *${item.quantity}` : '';
+                    lines.push(`${item.itemCode || ''} ${item.itemName}${qty}`);
+                });
+                lines.push('');
+            }
 
             if (orderData.phone) lines.push(`電話：${orderData.phone}`);
             if (orderData.address) lines.push(`地址：${orderData.address}`);
-            // Removed Invoice
+            if (orderData.invoiceNo) lines.push(`發票：${orderData.invoiceNo}`);
             lines.push(`備註：${orderData.remarks || ''}`);
 
             const text = lines.join('\n');
